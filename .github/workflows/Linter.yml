@@ -1,25 +1,17 @@
-name: Linter
+---
+name: Super-Linter
 
 on:  # yamllint disable-line rule:truthy
   push:
-    branches:
-      - prod
-      - preprod
+    branches: [ prod, preprod ]
   pull_request:
-    branches:
-      - prod
-      - preprod
+    branches: [ prod, preprod ]
+permissions: read-all
 
 jobs:
   build:
-    name: Lint
+    name: Super-Linter
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: read
-      # To report GitHub Actions status checks
-      statuses: write
 
     steps:
       - name: Checkout code
