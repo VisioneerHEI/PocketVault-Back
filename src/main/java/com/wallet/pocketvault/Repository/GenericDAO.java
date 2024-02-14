@@ -1,10 +1,13 @@
 package com.wallet.pocketvault.Repository;
 
+import lombok.Getter;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+@Getter
 public abstract class GenericDAO <T>{
     private final Connection connection;
 
@@ -12,11 +15,9 @@ public abstract class GenericDAO <T>{
         this.connection = connection;
     }
 
-    public abstract void insert(T toInsert) throws SQLException;
+    public abstract void save(T toSave) throws SQLException;
 
     public abstract void update(T toUpdate) throws SQLException;
-
-    public  abstract  void delete(T toDelete) throws SQLException;
 
     public abstract List<T> findAll() throws SQLException;
 

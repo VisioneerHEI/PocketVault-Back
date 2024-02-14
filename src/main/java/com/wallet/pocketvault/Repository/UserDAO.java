@@ -1,85 +1,92 @@
 package com.wallet.pocketvault.Repository;
 
-import com.wallet.pocketvault.Configuration.DatabaseConnection;
 import com.wallet.pocketvault.Entity.User;
+import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public class UserDAO {
-    private final DatabaseConnection databaseConnection;
-
-    public UserDAO(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
+@Repository
+public class UserDAO extends GenericDAO <User> {
+    public UserDAO(Connection connection) {
+        super(connection);
     }
 
-    public void registerUser(User user) {
-        String sql = "INSERT INTO User (idUser, userName, password, email) VALUES (?, ?, ?, ?)";
+    private static User extractClientFromResultSet(ResultSet resultSet) throws SQLException {
+        int idUser = resultSet.getInt("id_user");
+        String username = resultSet.getString("username");
+        String password = resultSet.getString("password");
+        String email = resultSet.getString("email");
 
-        try (Connection connection = databaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getEmail());
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error registering user: ");
-        }
+        return new User(idUser, username, password, email);
     }
+    @Override
+    public void save(User toSave) throws SQLException {
+        String sql = "INSERT INTO User(id_user, username, password, email) " +
+                "VALUES (?, ?, ?, ?)";
 
-    public User authenticateUser(String username, String password) {
-        String sql = "SELECT * FROM User WHERE username = ? AND password = ?";
-        try (Connection connection = databaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, toSave.getIdUser());
+            statement.setString(2, toSave.getUsername());
+            statement.setString(3, toSave.getPassword());
+            statement.setString(5, toSave.getEmail());
 
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (((ResultSet) resultSet).next()) {
-                return new User(
-                        resultSet.getInt("id_owner"),
-                        resultSet.getString("owner_name"),
-                        resultSet.getString("password"),
-                        resultSet.getString("email")
-                );
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    toSave.setIdUser(generatedKeys.getInt(1));
+                }
             }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("there was an error when authenticate the username or password");
         }
-        return null;
+    }
+        
+
+    @Override
+    public void update(User toUpdate) throws SQLException {
+        String sql = "UPDATE User " +
+                "SET username = ?, password = ?, email = ? " +
+                "WHERE id_client = ?";
+
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setString(1, toUpdate.getUsername());
+            statement.setString(2, toUpdate.getPassword());
+            statement.setString(3, toUpdate.getEmail());
+            statement.setInt(4, toUpdate.getIdUser());
+
+            statement.executeUpdate();
+        }
     }
 
-    public User getUserByUsername(String username) {
-        String sql = "SELECT * FROM User WHERE username = ?";
+    @Override
+    public List<User> findAll() throws SQLException {
+        List<User> AllUsers = new ArrayList<>();
+        String sql = "SELECT * FROM User";
 
-        try (Connection connection = databaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, username);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return new User(
-                        resultSet.getInt("idUser"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getString("email")
-                );
+        try (Statement statement = getConnection().createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                User user = extractClientFromResultSet(resultSet);
+                AllUsers.add(user);
             }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("there was an error when fetching owner with username : " );
         }
+        return AllUsers;
+    }
 
-        return null;
+    @Override
+    public Optional<User> findById(int idUser) throws SQLException {
+        String sql = "SELECT * FROM User WHERE id_user = ?";
+
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, idUser);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(extractClientFromResultSet(resultSet));
+                }
+            }
+        }
+        return Optional.empty();
     }
 }
