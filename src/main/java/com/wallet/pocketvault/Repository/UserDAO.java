@@ -16,7 +16,7 @@ public class UserDAO {
     }
 
     public void registerUser(User user) {
-        String sql = "INSERT INTO Owner (id_owner, owner_name, password, email) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO User (idUser, userName, password, email) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -33,7 +33,7 @@ public class UserDAO {
     }
 
     public User authenticateUser(String username, String password) {
-        String sql = "SELECT * FROM Owner WHERE owner_name = ? AND password = ?";
+        String sql = "SELECT * FROM User WHERE username = ? AND password = ?";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -58,7 +58,7 @@ public class UserDAO {
     }
 
     public User getUserByUsername(String username) {
-        String sql = "SELECT * FROM Owner WHERE owner_name = ?";
+        String sql = "SELECT * FROM User WHERE username = ?";
 
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -69,8 +69,8 @@ public class UserDAO {
 
             if (resultSet.next()) {
                 return new User(
-                        resultSet.getInt("id_owner"),
-                        resultSet.getString("owner_name"),
+                        resultSet.getInt("idUser"),
+                        resultSet.getString("username"),
                         resultSet.getString("password"),
                         resultSet.getString("email")
                 );
