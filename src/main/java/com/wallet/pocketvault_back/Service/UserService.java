@@ -23,7 +23,7 @@ public class UserService {
 
             return toSave;
         } catch (SQLException e) {
-            throw new RuntimeException("There was an error when saving the User.");
+            throw new RuntimeException("There was an error when saving the user.");
         }
     }
 
@@ -36,7 +36,8 @@ public class UserService {
         }
     }
 
-    public List<User> findAll() {
+
+    public List<User> getAllUsers() {
         try {
             return userDAO.findAll();
         } catch (SQLException e) {
@@ -44,11 +45,11 @@ public class UserService {
         }
     }
 
-    public Optional<User> findById(int id) {
+    public Optional<User> getUserById(int id) {
         try {
             return userDAO.findById(id);
         } catch (SQLException e) {
-            throw new RuntimeException("There has been an error when fetching user with id : " + id);
+            throw new RuntimeException("There has been an error when fetching user with identification : " + id);
         }
     }
 
