@@ -1,4 +1,4 @@
-package com.wallet.pocketvault.Configuration;
+package com.wallet.pocketvault_back.Configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

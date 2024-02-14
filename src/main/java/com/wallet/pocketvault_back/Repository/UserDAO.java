@@ -1,6 +1,6 @@
-package com.wallet.pocketvault.Repository;
+package com.wallet.pocketvault_back.Repository;
 
-import com.wallet.pocketvault.Entity.User;
+import com.wallet.pocketvault_back.Entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;

@@ -1,4 +1,4 @@
-package com.wallet.pocketvault.Repository;
+package com.wallet.pocketvault_back.Repository;
 
 import lombok.Getter;
 
