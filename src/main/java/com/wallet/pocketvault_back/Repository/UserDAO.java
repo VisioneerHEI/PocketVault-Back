@@ -10,10 +10,9 @@ import java.util.Optional;
 
 @Repository
 public class UserDAO extends GenericDAO <User> {
-    public UserDAO(Connection connection) {
+    public UserDAO (Connection connection){
         super(connection);
     }
-
     private static User extractClientFromResultSet(ResultSet resultSet) throws SQLException {
         int idUser = resultSet.getInt("id_user");
         String username = resultSet.getString("username");
@@ -24,7 +23,7 @@ public class UserDAO extends GenericDAO <User> {
     }
     @Override
     public void save(User toSave) throws SQLException {
-        String sql = "INSERT INTO User(id_user, username, password, email) " +
+        String sql = "INSERT INTO user(id_user, username, password, email) " +
                 "VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
