@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS CurrencyValue (
    destinationCurrencyId INT,
    amount DOUBLE PRECISION,
    date_effet TIMESTAMP,
+    "limit" DOUBLE PRECISION,
    FOREIGN KEY (sourceCurrencyId) REFERENCES Currency(id_currency),
    FOREIGN KEY (destinationCurrencyId) REFERENCES Currency(id_currency)
 );
