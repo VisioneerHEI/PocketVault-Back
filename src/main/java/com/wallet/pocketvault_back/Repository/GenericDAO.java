@@ -21,12 +21,6 @@ public abstract class GenericDAO <T>{
 
     public abstract void update(T toUpdate) throws SQLException;
 
-    public abstract void save(Currency toSave) throws SQLException;
-
-    public abstract void save(Transaction toSave) throws SQLException;
-
-    public abstract void update(Transaction toUpdate) throws SQLException;
-
     public abstract List<T> findAll() throws SQLException;
 
     public abstract Optional<T> findById(int id) throws SQLException;

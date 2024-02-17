@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TransactionDAO extends GenericDAO{
+public class TransactionDAO extends GenericDAO<Transaction>{
     public TransactionDAO(DatabaseConnection databaseConnection) {
         super(databaseConnection.getConnection());
     }
@@ -24,21 +24,6 @@ public class TransactionDAO extends GenericDAO{
 
 
         return new Transaction(transactionId, labelTransaction, amount, dateOfTransaction,transactionType,accounts);
-    }
-
-    @Override
-    public void save(Transaction toSave) throws SQLException {
-        String sql = "INSERT INTO Transaction (transactionId, labelTransaction, " +
-                "amount, dateOfTransaction, transactionType, accounts)" +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            statement.setInt(1, toSave.getTransactionId());
-            statement.setString(2, toSave.getLabelTransaction());
-            statement.setDouble(3, toSave.getAmount());
-            statement.setTimestamp(4, toSave.getDateOfTransaction());
-            statement.setString(5, toSave.getTransactionType());
-            statement.setArray(6, (Array) toSave.getAccounts());
-        }
     }
 
     @Override
@@ -57,6 +42,22 @@ public class TransactionDAO extends GenericDAO{
             statement.setInt(5, toUpdate.getTransactionId());
 
             statement.executeUpdate();
+        }
+
+    }
+
+    @Override
+    public void save(Transaction toSave) throws SQLException {
+        String sql = "INSERT INTO Transaction (transactionId, labelTransaction, " +
+                "amount, dateOfTransaction, transactionType, accounts)" +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            statement.setInt(1, toSave.getTransactionId());
+            statement.setString(2, toSave.getLabelTransaction());
+            statement.setDouble(3, toSave.getAmount());
+            statement.setTimestamp(4, toSave.getDateOfTransaction());
+            statement.setString(5, toSave.getTransactionType());
+            statement.setArray(6, (Array) toSave.getAccounts());
         }
 
     }
