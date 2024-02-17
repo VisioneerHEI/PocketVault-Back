@@ -1,6 +1,9 @@
 package com.wallet.pocketvault_back.Repository;
 
+import com.wallet.pocketvault_back.Configuration.DatabaseConnection;
 import com.wallet.pocketvault_back.Entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -10,9 +13,12 @@ import java.util.Optional;
 
 @Repository
 public class UserDAO extends GenericDAO <User> {
-    public UserDAO (Connection connection){
-        super(connection);
+
+    @Autowired
+    public UserDAO(DatabaseConnection databaseConnection) {
+        super(databaseConnection.getConnection());
     }
+
     private static User extractClientFromResultSet(ResultSet resultSet) throws SQLException {
         int idUser = resultSet.getInt("id_user");
         String username = resultSet.getString("username");
@@ -23,7 +29,7 @@ public class UserDAO extends GenericDAO <User> {
     }
     @Override
     public void save(User toSave) throws SQLException {
-        String sql = "INSERT INTO user(id_user, username, password, email) " +
+        String sql = "INSERT INTO Owner(id_user, username, password, email) " +
                 "VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -45,9 +51,8 @@ public class UserDAO extends GenericDAO <User> {
 
     @Override
     public void update(User toUpdate) throws SQLException {
-        String sql = "UPDATE User " +
-                "SET username = ?, password = ?, email = ? " +
-                "WHERE id_client = ?";
+        String sql = "UPDATE Owner SET username = ?, password = ?, email = ? WHERE id_user = ?";
+
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setString(1, toUpdate.getUsername());
@@ -62,7 +67,7 @@ public class UserDAO extends GenericDAO <User> {
     @Override
     public List<User> findAll() throws SQLException {
         List<User> AllUsers = new ArrayList<>();
-        String sql = "SELECT * FROM User";
+        String sql = "SELECT * FROM Owner";
 
         try (Statement statement = getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
@@ -76,7 +81,7 @@ public class UserDAO extends GenericDAO <User> {
 
     @Override
     public Optional<User> findById(int idUser) throws SQLException {
-        String sql = "SELECT * FROM User WHERE id_user = ?";
+        String sql = "SELECT * FROM Owner WHERE id_user = ?";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setInt(1, idUser);

@@ -1,44 +1,46 @@
 package com.wallet.pocketvault_back.Configuration;
 
-import lombok.Getter;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
-@Getter
 @Configuration
 public class DatabaseConnection {
-    private Connection connection;
-public DatabaseConnection() {
-        String dbUrl = System.getenv("DB_URL");
-        String dbUser = System.getenv("DB_USER");
-        String dbPassword = System.getenv("DB_PASSWORD");
 
+    @Value("${spring.datasource.url}")
+    private String url;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    private static DatabaseConnection instance;
+    private static Connection connection;
+
+    // Constructeur sans arguments
+    public DatabaseConnection() {}
+
+    public static DatabaseConnection getInstance() {
+        if (instance == null) {
+            instance = new DatabaseConnection();
+        }
+        return instance;
+    }
+
+    public Connection getConnection() {
         try {
-
-            this.connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-            System.out.println("Database connection successful!");
-        } catch (SQLException e) {
-            System.err.println("Error connecting to database: " + e.getMessage());
-        }
-    }
-
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Database connection closed.");
-            } catch (SQLException e) {
-                System.err.println("Error closing database connection: " + e.getMessage());
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(url, username, password);
             }
+            return connection;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error connecting to database.", e);
         }
-    }
-
-    public static void main(String[] args) {
-        DatabaseConnection dbConnection = new DatabaseConnection();
-        dbConnection.closeConnection();
     }
 }
