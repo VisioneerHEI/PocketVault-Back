@@ -1,6 +1,5 @@
 package com.wallet.pocketvault_back.Entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
