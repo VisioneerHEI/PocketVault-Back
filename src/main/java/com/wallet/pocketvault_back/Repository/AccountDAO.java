@@ -82,5 +82,4 @@ public class AccountDAO extends GenericDAO <Account>{
         }
         return Optional.empty();
     }
-    }
 }
