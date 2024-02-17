@@ -19,7 +19,7 @@ public class UserDAO extends GenericDAO <User> {
         super(databaseConnection.getConnection());
     }
 
-    private static User extractClientFromResultSet(ResultSet resultSet) throws SQLException {
+    private static User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
         int idUser = resultSet.getInt("id_user");
         String username = resultSet.getString("username");
         String password = resultSet.getString("password");
@@ -72,7 +72,7 @@ public class UserDAO extends GenericDAO <User> {
         try (Statement statement = getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                User user = extractClientFromResultSet(resultSet);
+                User user = extractUserFromResultSet(resultSet);
                 AllUsers.add(user);
             }
         }
@@ -87,7 +87,7 @@ public class UserDAO extends GenericDAO <User> {
             statement.setInt(1, idUser);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return Optional.of(extractClientFromResultSet(resultSet));
+                    return Optional.of(extractUserFromResultSet(resultSet));
                 }
             }
         }

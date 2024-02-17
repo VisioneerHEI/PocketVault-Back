@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,5 +17,5 @@ public class Account {
     private String name;
     private double balance;
     private String accountType;
-    private Currency id_Currency;
+    private List<Currency> currencies;
 }
