@@ -34,4 +34,19 @@ public class TransactionService {
         }
     }
 
+    public void depositMoney(Transaction depositRequest) {
+        try {
+            Account account = accountDAO.findById(depositRequest.getAccountId())
+                    .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+            double currentBalance = account.getBalance();
+            double depositedAmount = depositRequest.getAmount();
+            account.setBalance(currentBalance + depositedAmount);
+
+            accountDAO.save(account);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while depositing money", e);
+        }
+    }
+
 }

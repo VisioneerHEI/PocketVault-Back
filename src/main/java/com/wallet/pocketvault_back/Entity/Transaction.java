@@ -20,5 +20,5 @@ public class Transaction {
     private double amount;
     private Timestamp dateOfTransaction;
     private String transactionType;
-    private List<Account> accounts;
+    private int accountId;
 }

@@ -24,17 +24,17 @@ public class TransactionDAO extends GenericDAO<Transaction>{
         double amount = resultSet.getDouble("amount");
         Timestamp dateOfTransaction = resultSet.getTimestamp("dateOfTransaction");
         String transactionType = resultSet.getString("transactionType");
-        List<Account> accounts = new ArrayList<>();
+        int accountId = resultSet.getInt("accountId");
 
 
-        return new Transaction(transactionId, sourceAccountId, destinationAccountId, labelTransaction, amount, dateOfTransaction,transactionType,accounts);
+        return new Transaction(transactionId, sourceAccountId, destinationAccountId, labelTransaction, amount, dateOfTransaction,transactionType,accountId);
     }
 
     @Override
     public void update(Transaction toUpdate) throws SQLException {
 
         String sql = "UPDATE Transaction SET sourceAccountId = ?, labelTransaction = ?, amount = ?, " +
-                "destinationAccountId = ?, getDateOfTransaction = ?, transactionType = ?, accounts = ?" +
+                "destinationAccountId = ?, getDateOfTransaction = ?, transactionType = ?, accountId = ?" +
                 " WHERE transactionId = ?";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -42,8 +42,10 @@ public class TransactionDAO extends GenericDAO<Transaction>{
             statement.setDouble(2, toUpdate.getAmount());
             statement.setTimestamp(3, toUpdate.getDateOfTransaction());
             statement.setString(4, toUpdate.getTransactionType());
-            statement.setArray(4, (Array) toUpdate.getAccounts());
-            statement.setInt(5, toUpdate.getTransactionId());
+            statement.setInt(5, toUpdate.getAccountId());
+            statement.setInt(6, toUpdate.getTransactionId());
+            statement.setInt(7, toUpdate.getSourceAccountId());
+            statement.setInt(8, toUpdate.getDestinationAccountId());
 
             statement.executeUpdate();
         }
@@ -63,7 +65,7 @@ public class TransactionDAO extends GenericDAO<Transaction>{
             statement.setString(5, toSave.getTransactionType());
             statement.setInt(6, toSave.getSourceAccountId());
             statement.setInt(7, toSave.getDestinationAccountId());
-            statement.setArray(8, (Array) toSave.getAccounts());
+            statement.setInt(8, toSave.getAccountId());
         }
 
     }
