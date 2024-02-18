@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public class AccountDAO extends GenericDAO <Account>{
 
+
     public AccountDAO(DatabaseConnection databaseConnection) throws SQLException {
         super(databaseConnection.getConnection());
     }

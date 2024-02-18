@@ -5,6 +5,7 @@ import com.wallet.pocketvault_back.Service.TransactionService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.sql.SQLException;
 
 
 public class TransactionController {
@@ -13,6 +14,7 @@ public class TransactionController {
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
+
 
     //endpoint for transferring money
     @PostMapping("/transferMoney")

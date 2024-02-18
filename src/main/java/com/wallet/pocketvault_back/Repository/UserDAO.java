@@ -20,7 +20,9 @@ public class UserDAO extends GenericDAO <User> {
     }
 
     private static User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
+
         int idUser = resultSet.getInt("idUser");
+
         String username = resultSet.getString("username");
         String password = resultSet.getString("password");
         String email = resultSet.getString("email");

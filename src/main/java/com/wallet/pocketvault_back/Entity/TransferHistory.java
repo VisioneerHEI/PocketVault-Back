@@ -3,6 +3,7 @@ package com.wallet.pocketvault_back.Entity;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter

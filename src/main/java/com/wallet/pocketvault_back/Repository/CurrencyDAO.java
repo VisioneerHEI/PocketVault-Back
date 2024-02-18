@@ -2,12 +2,15 @@ package com.wallet.pocketvault_back.Repository;
 
 import com.wallet.pocketvault_back.Configuration.DatabaseConnection;
 import com.wallet.pocketvault_back.Entity.Currency;
+
 import org.springframework.stereotype.Repository;
+
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Repository
 public class CurrencyDAO extends GenericDAO <Currency>{
@@ -15,10 +18,11 @@ public class CurrencyDAO extends GenericDAO <Currency>{
         super(databaseConnection.getConnection());
     }
 
-    private static Currency extractCurrencyFromResultSet(ResultSet resultSet) throws SQLException {
+    private static Currency extractCurrencyFromResultSet (ResultSet resultSet) throws SQLException {
         int currencyId = resultSet.getInt("currencyId");
         String currencyName = resultSet.getString("currencyName");
         String currencyCode = resultSet.getString("currencyCode");
+
 
         return new Currency(currencyId, currencyName,currencyCode);
     }
@@ -35,6 +39,7 @@ public class CurrencyDAO extends GenericDAO <Currency>{
 
     @Override
     public void update(Currency toUpdate) throws SQLException {
+
         String sql = "UPDATE Currency SET currencyName = ?, currencyCode = ? WHERE currencyId = ?";
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setString(1, toUpdate.getCurrencyName());
@@ -43,6 +48,19 @@ public class CurrencyDAO extends GenericDAO <Currency>{
 
             statement.executeUpdate();
         }
+=======
+
+            String sql = "UPDATE Currency SET currencyName = ?, currencyCode = ? ? WHERE currencyId = ?";
+
+            try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+                statement.setString(1, toUpdate.getCurrencyName());
+                statement.setString(2, toUpdate.getCurrencyCode());
+                statement.setInt(3, toUpdate.getCurrencyId());
+
+                statement.executeUpdate();
+            }
+
+
     }
 
     @Override

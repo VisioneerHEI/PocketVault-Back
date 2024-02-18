@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public class TransactionDAO extends GenericDAO<Transaction>{
+
     public TransactionDAO(DatabaseConnection databaseConnection) throws SQLException {
         super(databaseConnection.getConnection());
     }

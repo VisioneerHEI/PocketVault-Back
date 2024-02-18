@@ -1,6 +1,7 @@
 package com.wallet.pocketvault_back.Service;
 
 import com.wallet.pocketvault_back.Entity.Currency;
+
 import com.wallet.pocketvault_back.Entity.CurrencyValue;
 import com.wallet.pocketvault_back.Repository.CurrencyDAO;
 import com.wallet.pocketvault_back.Repository.CurrencyValueDAO;
@@ -18,6 +19,7 @@ public class CurrencyService {
     private final CurrencyDAO currencyDAO;
     private CurrencyValueDAO currencyValueDAO;
     private static final int USD_ID = 1;
+
     public CurrencyService(CurrencyDAO currencyDAO) {
         this.currencyDAO = currencyDAO;
     }
@@ -50,6 +52,7 @@ public class CurrencyService {
         }
     }
 
+
     private double convertCurrency(double amount, int sourceCurrencyId) {
         CurrencyValue currencyValue = currencyValueDAO
                 .findBySourceCurrencyIdAndDestinationCurrencyId(sourceCurrencyId, CurrencyService.USD_ID)
@@ -69,6 +72,15 @@ public class CurrencyService {
             return convertCurrency(amount, sourceCurrencyId);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Error while converting currency", e);
+        }
+    }
+}
+
+    public Optional<Currency> getCurrencyById(int id) {
+        try {
+            return currencyDAO.findById(id);
+        } catch (SQLException e) {
+            throw new RuntimeException("There has been an error when fetching currency with identification : " + id);
         }
     }
 }
