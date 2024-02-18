@@ -1,15 +1,23 @@
 package com.wallet.pocketvault_back.Service;
 
 import com.wallet.pocketvault_back.Entity.Currency;
+import com.wallet.pocketvault_back.Entity.CurrencyValue;
 import com.wallet.pocketvault_back.Repository.CurrencyDAO;
+import com.wallet.pocketvault_back.Repository.CurrencyValueDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
+@Service
 public class CurrencyService {
+    @Autowired
     private final CurrencyDAO currencyDAO;
-
+    private CurrencyValueDAO currencyValueDAO;
+    private static final int USD_ID = 1;
     public CurrencyService(CurrencyDAO currencyDAO) {
         this.currencyDAO = currencyDAO;
     }
@@ -42,11 +50,25 @@ public class CurrencyService {
         }
     }
 
-    public Optional<Currency> getCurrencyById(int id) {
+    private double convertCurrency(double amount, int sourceCurrencyId, int destinationCurrencyId) {
+        CurrencyValue currencyValue = currencyValueDAO
+                .findBySourceCurrencyIdAndDestinationCurrencyId(sourceCurrencyId, destinationCurrencyId)
+                .orElseThrow(() -> new IllegalArgumentException("Conversion rate not found"));
+
+        Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+        if (currencyValue.getDate_effet().after(currentDate)) {
+            throw new IllegalArgumentException("Conversion rate not valid for current date");
+        }
+
+        double exchangeRate = currencyValue.getAmount();
+        return amount / exchangeRate;
+    }
+
+    public double convertCurrencyToUSD(double amount, int sourceCurrencyId) {
         try {
-            return currencyDAO.findById(id);
-        } catch (SQLException e) {
-            throw new RuntimeException("There has been an error when fetching currency with identification : " + id);
+            return convertCurrency(amount, sourceCurrencyId, USD_ID);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Error while converting currency", e);
         }
     }
 }
