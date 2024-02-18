@@ -14,6 +14,8 @@ import java.util.List;
 @ToString
 public class Transaction {
     private int transactionId;
+    private int sourceAccountId;
+    private int destinationAccountId;
     private String labelTransaction;
     private double amount;
     private Timestamp dateOfTransaction;

@@ -16,6 +16,8 @@ public class TransactionDAO extends GenericDAO<Transaction>{
 
     private static Transaction extractTransactionFromResultSet(ResultSet resultSet) throws SQLException {
         int transactionId = resultSet.getInt("transactionId");
+        int sourceAccountId = resultSet.getInt("sourceAccountId");
+        int destinationAccountId = resultSet.getInt("destinationAccountId");
         String labelTransaction = resultSet.getString("labelTransaction");
         double amount = resultSet.getDouble("amount");
         Timestamp dateOfTransaction = resultSet.getTimestamp("dateOfTransaction");
@@ -23,14 +25,14 @@ public class TransactionDAO extends GenericDAO<Transaction>{
         List<Account> accounts = new ArrayList<>();
 
 
-        return new Transaction(transactionId, labelTransaction, amount, dateOfTransaction,transactionType,accounts);
+        return new Transaction(transactionId, sourceAccountId, destinationAccountId, labelTransaction, amount, dateOfTransaction,transactionType,accounts);
     }
 
     @Override
     public void update(Transaction toUpdate) throws SQLException {
 
-        String sql = "UPDATE Transaction SET labelTransaction = ?, amount = ?, " +
-                "getDateOfTransaction = ?, transactionType = ?, accounts = ?" +
+        String sql = "UPDATE Transaction SET sourceAccountId = ?, labelTransaction = ?, amount = ?, " +
+                "destinationAccountId = ?, getDateOfTransaction = ?, transactionType = ?, accounts = ?" +
                 " WHERE transactionId = ?";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -57,7 +59,9 @@ public class TransactionDAO extends GenericDAO<Transaction>{
             statement.setDouble(3, toSave.getAmount());
             statement.setTimestamp(4, toSave.getDateOfTransaction());
             statement.setString(5, toSave.getTransactionType());
-            statement.setArray(6, (Array) toSave.getAccounts());
+            statement.setInt(6, toSave.getSourceAccountId());
+            statement.setInt(7, toSave.getDestinationAccountId());
+            statement.setArray(8, (Array) toSave.getAccounts());
         }
 
     }
