@@ -2,7 +2,6 @@ package com.wallet.pocketvault_back.Service;
 
 import com.wallet.pocketvault_back.Entity.TransferHistory;
 import com.wallet.pocketvault_back.Repository.TransferHistoryDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -11,9 +10,11 @@ import java.util.List;
 
 @Service
 public class TransferHistoryService {
+    public final TransferHistoryDAO transferHistoryDAO;
 
-    @Autowired
-    private TransferHistoryDAO transferHistoryDAO;
+    public TransferHistoryService(TransferHistoryDAO transferHistoryDAO) {
+        this.transferHistoryDAO = transferHistoryDAO;
+    }
 
     public List<TransferHistory> getAllTransferHistory() {
         try {

@@ -50,13 +50,13 @@ public class CurrencyService {
         }
     }
 
-    private double convertCurrency(double amount, int sourceCurrencyId, int destinationCurrencyId) {
+    private double convertCurrency(double amount, int sourceCurrencyId) {
         CurrencyValue currencyValue = currencyValueDAO
-                .findBySourceCurrencyIdAndDestinationCurrencyId(sourceCurrencyId, destinationCurrencyId)
+                .findBySourceCurrencyIdAndDestinationCurrencyId(sourceCurrencyId, CurrencyService.USD_ID)
                 .orElseThrow(() -> new IllegalArgumentException("Conversion rate not found"));
 
         Timestamp currentDate = new Timestamp(System.currentTimeMillis());
-        if (currencyValue.getDate_effet().after(currentDate)) {
+        if (currencyValue.getDateEffet().after(currentDate)) {
             throw new IllegalArgumentException("Conversion rate not valid for current date");
         }
 
@@ -66,7 +66,7 @@ public class CurrencyService {
 
     public double convertCurrencyToUSD(double amount, int sourceCurrencyId) {
         try {
-            return convertCurrency(amount, sourceCurrencyId, USD_ID);
+            return convertCurrency(amount, sourceCurrencyId);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Error while converting currency", e);
         }

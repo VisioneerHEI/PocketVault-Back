@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public class CurrencyDAO extends GenericDAO <Currency>{
-    public CurrencyDAO(DatabaseConnection databaseConnection) {
+    public CurrencyDAO(DatabaseConnection databaseConnection) throws SQLException {
         super(databaseConnection.getConnection());
     }
 

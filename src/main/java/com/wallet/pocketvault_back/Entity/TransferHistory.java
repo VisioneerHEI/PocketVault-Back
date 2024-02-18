@@ -3,7 +3,6 @@ package com.wallet.pocketvault_back.Entity;
 import lombok.*;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Getter
 @Setter
@@ -11,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class TransferHistory {
-    private int id_historyEntry;
+    private int idHistoryEntry;
     private User users;
     private int debitTransactionId;
     private int creditTransactionId;

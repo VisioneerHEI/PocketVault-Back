@@ -15,12 +15,12 @@ import java.util.Optional;
 public class UserDAO extends GenericDAO <User> {
 
     @Autowired
-    public UserDAO(DatabaseConnection databaseConnection) {
+    public UserDAO(DatabaseConnection databaseConnection) throws SQLException {
         super(databaseConnection.getConnection());
     }
 
     private static User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
-        int idUser = resultSet.getInt("id_user");
+        int idUser = resultSet.getInt("idUser");
         String username = resultSet.getString("username");
         String password = resultSet.getString("password");
         String email = resultSet.getString("email");
@@ -29,7 +29,7 @@ public class UserDAO extends GenericDAO <User> {
     }
     @Override
     public void save(User toSave) throws SQLException {
-        String sql = "INSERT INTO Owner(id_user, username, password, email) " +
+        String sql = "INSERT INTO User(idUser, username, password, email) " +
                 "VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -51,7 +51,7 @@ public class UserDAO extends GenericDAO <User> {
 
     @Override
     public void update(User toUpdate) throws SQLException {
-        String sql = "UPDATE Owner SET username = ?, password = ?, email = ? WHERE id_user = ?";
+        String sql = "UPDATE User SET username = ?, password = ?, email = ? WHERE idUser = ?";
 
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -67,7 +67,7 @@ public class UserDAO extends GenericDAO <User> {
     @Override
     public List<User> findAll() throws SQLException {
         List<User> AllUsers = new ArrayList<>();
-        String sql = "SELECT * FROM Owner";
+        String sql = "SELECT * FROM User";
 
         try (Statement statement = getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
@@ -81,7 +81,7 @@ public class UserDAO extends GenericDAO <User> {
 
     @Override
     public Optional<User> findById(int idUser) throws SQLException {
-        String sql = "SELECT * FROM Owner WHERE id_user = ?";
+        String sql = "SELECT * FROM User WHERE idUser = ?";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setInt(1, idUser);

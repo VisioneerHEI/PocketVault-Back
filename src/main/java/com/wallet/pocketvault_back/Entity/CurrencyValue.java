@@ -12,11 +12,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 public class CurrencyValue {
-    private int id_value;
+    private int idValue;
     private int sourceCurrencyId;
     private int destinationCurrencyId;
     private double amount;
-    private Timestamp date_effet;
+    private Timestamp dateEffet;
     private Currency sourceCurrency;
     private Currency destinationCurrency;
 }
