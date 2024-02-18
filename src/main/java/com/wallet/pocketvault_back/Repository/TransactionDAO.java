@@ -3,12 +3,14 @@ package com.wallet.pocketvault_back.Repository;
 import com.wallet.pocketvault_back.Configuration.DatabaseConnection;
 import com.wallet.pocketvault_back.Entity.Account;
 import com.wallet.pocketvault_back.Entity.Transaction;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class TransactionDAO extends GenericDAO<Transaction>{
     public TransactionDAO(DatabaseConnection databaseConnection) {
         super(databaseConnection.getConnection());
