@@ -9,16 +9,19 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name = "balance")
 public class Balance {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @Column private Double amount;
+  @Column private Double balance;
 
   @Column @GeneratedValue private Timestamp date;
 
+  @Column private String currency_code;
+
   @ManyToOne
-  @JoinColumn(name = "id_kid")
+  @JoinColumn(name = "id_user")
   private User user;
 }

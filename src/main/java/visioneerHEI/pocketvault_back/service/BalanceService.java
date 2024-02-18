@@ -39,7 +39,7 @@ public class BalanceService {
     List<Balance> balance = balanceRepository.findAll(Sort.sort(Date.class).descending());
 
     if (!balance.isEmpty()) {
-      return balance.get(0).getAmount();
+      return balance.get(0).getBalance();
     }
 
     return 0D;

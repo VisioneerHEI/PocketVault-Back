@@ -9,6 +9,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name = "tansaction")
 public class Transaction {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,7 +23,11 @@ public class Transaction {
 
   @Column private String type;
 
+  @Column private String currency_code;
+
+  @Column private String receiver;
+
   @ManyToOne
-  @JoinColumn(name = "id_kid")
+  @JoinColumn(name = "id_user")
   private User user;
 }
