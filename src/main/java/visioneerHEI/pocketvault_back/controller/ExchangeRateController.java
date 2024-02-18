@@ -10,21 +10,20 @@ import visioneerHEI.pocketvault_back.service.ExchangeRateService;
 @RestController
 @CrossOrigin
 public class ExchangeRateController {
-    private final ExchangeRateService exchangeRateService;
+  private final ExchangeRateService exchangeRateService;
 
-    public ExchangeRateController(ExchangeRateService exchangeRateService) {
-        this.exchangeRateService = exchangeRateService;
-    }
+  public ExchangeRateController(ExchangeRateService exchangeRateService) {
+    this.exchangeRateService = exchangeRateService;
+  }
 
-    @GetMapping("/exchange-rate/{currencyCode}")
-    public ExchangeRateResponse getExchangeRate(@PathVariable String currencyCode) {
-        return exchangeRateService.getExchangeRate(currencyCode);
-    }
+  @GetMapping("/exchange-rate/{currencyCode}")
+  public ExchangeRateResponse getExchangeRate(@PathVariable String currencyCode) {
+    return exchangeRateService.getExchangeRate(currencyCode);
+  }
 
-    @GetMapping("/exchange-rate")
-    public ExchangeRateResponse getExchangeRate() {
-        // This will call the getExchangeRate() method with "USD" as the default
-        return exchangeRateService.getExchangeRate();
-    }
+  @GetMapping("/exchange-rate")
+  public ExchangeRateResponse getExchangeRate() {
+    // This will call the getExchangeRate() method with "USD" as the default
+    return exchangeRateService.getExchangeRate();
+  }
 }
-
