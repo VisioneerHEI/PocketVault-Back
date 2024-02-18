@@ -14,7 +14,6 @@ import java.util.List;
 public class TransferHistoryController {
     private final TransferHistoryService transferHistoryService;
 
-    @Autowired
     public TransferHistoryController(TransferHistoryService transferHistoryService) {
         this.transferHistoryService = transferHistoryService;
     }

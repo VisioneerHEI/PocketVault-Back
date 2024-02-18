@@ -17,14 +17,16 @@ import java.util.Optional;
 public class TransferHistoryDAO extends GenericDAO<TransferHistory> {
     private final DatabaseConnection databaseConnection;
 
-    public TransferHistoryDAO(DatabaseConnection databaseConnection) {
+
+    public TransferHistoryDAO(DatabaseConnection databaseConnection) throws SQLException {
+
         super(databaseConnection.getConnection());
         this.databaseConnection = databaseConnection;
     }
 
     private TransferHistory extractTransferHistoryFromResultSet(ResultSet resultSet) throws SQLException {
         TransferHistory transferHistory = new TransferHistory();
-        transferHistory.setId_historyEntry(resultSet.getInt("id_historyEntry"));
+         transferHistory.setIdHistoryEntry(resultSet.getInt("idHistoryEntry"));
 
         UserDAO userDAO = new UserDAO(databaseConnection);
         int idUser = resultSet.getInt("idUser");
@@ -71,14 +73,17 @@ public class TransferHistoryDAO extends GenericDAO<TransferHistory> {
     public void update(TransferHistory toUpdate) throws SQLException {
         String sql = "UPDATE TransferHistoryEntry " +
                 "SET idUser = ?, debitTransactionId = ?, creditTransactionId = ?, transferAmount = ?, transferDate = ? " +
-                "WHERE id_historyEntry = ?";
+
+                "WHERE idHistory = ?";
 
         int idUser = toUpdate.getUsers().getIdUser();
         int debitTransactionId = toUpdate.getDebitTransactionId();
         int creditTransactionId = toUpdate.getCreditTransactionId();
         double transferAmount = toUpdate.getTransferAmount();
         Timestamp transferDate = toUpdate.getTransferDate();
-        int id_historyEntry = toUpdate.getId_historyEntry();
+
+        int idHistoryEntry = toUpdate.getIdHistoryEntry();
+
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setInt(1, idUser);
@@ -86,7 +91,9 @@ public class TransferHistoryDAO extends GenericDAO<TransferHistory> {
             statement.setInt(3, creditTransactionId);
             statement.setDouble(4, transferAmount);
             statement.setTimestamp(5, transferDate);
-            statement.setInt(6, id_historyEntry);
+
+            statement.setInt(6, idHistoryEntry);
+
 
             statement.executeUpdate();
         }
@@ -109,7 +116,9 @@ public class TransferHistoryDAO extends GenericDAO<TransferHistory> {
 
     @Override
     public Optional<TransferHistory> findById(int id_historyEntry) throws SQLException {
-        String sql = "SELECT * FROM TransferHistoryEntry WHERE id_historyEntry = ?";
+
+        String sql = "SELECT * FROM TransferHistoryEntry WHERE idHistory = ?";
+
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
             statement.setInt(1, id_historyEntry);
